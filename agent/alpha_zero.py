@@ -87,9 +87,10 @@ alpha_zero.compile(loss={'output_1': tf.keras.losses.SparseCategoricalCrossentro
             optimizer=agent.optimizer(),
             loss_weights={'output_1': 0.5, 'output_2': 0.5}
             )
-data = np.zeros([7, 14, 14, 1], dtype=float)
-target_actor = np.ones([7, 1], dtype=int)
-target_critic = np.ones([7, 1], dtype=float)
+b = 6
+data = np.zeros([b, 14, 14, 1], dtype=float)
+target_actor = np.ones([b, 1], dtype=int)
+target_critic = np.ones([b, 1], dtype=float)
 alpha_zero.fit(data,
           [target_actor, target_critic],
           epochs=1)

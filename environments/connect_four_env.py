@@ -24,7 +24,7 @@ class ConnectFourEnvEncoder():
 
     @staticmethod
     def decode_action_index(index):
-        # TODO - placeholder for more efficient string methods
+        # TODO - identity placeholder for more efficient string methods
         return index
 
     def n_actions(self):

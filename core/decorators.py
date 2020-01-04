@@ -1,8 +1,8 @@
 '''
 File containing any useful custom function decorators.
+TODO - replace print statements with logs.
 '''
 
-# TODO - replace print statements with logs.
 def timer(f):
     '''
     Logs entry, exit, and time spent in a function.
