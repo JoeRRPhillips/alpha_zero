@@ -49,7 +49,12 @@ class Node:
         return edge.total_value / edge.visit_count
 
     def prior(self, action):
+        '''Return prior probability for a given action. Fetched from neural network.'''
         return self.edges[action].prior
+
+    def priors(self):
+        '''Return prior probability distribution across all available actions for this node.'''
+        return [self.edges[a].prior for a in self.actions()]
 
     def visit_count(self, action):
         if action in self.edges:
@@ -60,16 +65,21 @@ class Node:
 class MCTS():
     '''
     Implements the MCTS algorithm for AGZ using ResNet function approximators in place of rollout.
+    Args  
+      add_dirichlet_noise: whether or not to add dirichlet-noise to the policy prior during simulations to encourage exploration
+      dir_epsilon: proportion of intial prior distribution kept after being updated with dirichlet noise
+      dir_noise: Dirichlet distribution parameter
     '''
-    def __init__(self, model, env, encoder, trajectory_tracker, mcts_sims_per_move, c_puct):
+    def __init__(self, model, env, encoder, trajectory_tracker, mcts_sims_per_move, c_puct, add_dirichlet_noise, dir_epsilon, dir_noise):
         self.model = model
         self.env = env
         self.encoder = encoder
-
         self.trajectory_tracker = trajectory_tracker
-
         self.mcts_sims_per_move = mcts_sims_per_move
         self.c_puct = c_puct
+        self.add_dirichlet_noise = add_dirichlet_noise
+        self.dir_epsilon = dir_epsilon
+        self.dir_noise = dir_noise
 
     def select_action(self, root_state, env, current_player):
         '''
@@ -136,7 +146,14 @@ class MCTS():
 
         def puct(action):
             Q = node.expected_value(action)
-            prior = node.prior(action)
+            
+            if self.dirichlet_noise is True:
+                priors = node.priors
+                priors = (1 - self.dir_epsilon) * priors + self.dir_epsilon * np.random.dirichlet([self.dir_noise] * priors.size)
+                prior = priors[action]
+            else:
+                prior = node.prior(action)
+
             n_visits_child = node.visit_count(action)
             return Q + self.c_puct * prior * np.sqrt(N_parent) / (n_visits_child + 1)
 

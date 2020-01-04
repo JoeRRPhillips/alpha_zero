@@ -32,8 +32,10 @@ def train_connect_four(config):
 
     # Note there are 2 players for convenience, without duplication - only 1 MCTS runs at a time.
     # Still only 1 neural network.
-    player_1 = MCTS(alpha_zero, env, encoder, p1_trajectory_tracker, config.mcts_sims_per_move, config.c_puct)
-    player_2 = MCTS(alpha_zero, env, encoder, p2_trajectory_tracker, config.mcts_sims_per_move, config.c_puct)
+    player_1 = MCTS(alpha_zero, env, encoder, p1_trajectory_tracker, config.mcts_sims_per_move, config.c_puct,
+                     config.add_dirichlet_noise, config.dir_epsilon, config.dir_noise)
+    player_2 = MCTS(alpha_zero, env, encoder, p1_trajectory_tracker, config.mcts_sims_per_move, config.c_puct,
+                     config.add_dirichlet_noise, config.dir_epsilon, config.dir_noise)
 
     replay_buffer = ReplayBuffer(config.replay_buffer_max_size)
     trainer = Trainer(alpha_zero, replay_buffer, config.batch_size, config.n_training_steps_per_episode)
