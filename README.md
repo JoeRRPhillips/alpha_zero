@@ -18,5 +18,4 @@ Training Method:
 
 Comments:  
 • Current implementation is on a custom Connect4 environment.  
-• This is for learning more about RL; environment design can be made more efficient.  
-• This was undertaken as a fun project - the next one will be AlphaZero for (amateur) Go, building upon lessons learned in this project.  
+• Environment design can be made more efficient if needed. 
